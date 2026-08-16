@@ -1,14 +1,52 @@
-[tool.poetry]
-name = "inter-sdk-python"
+[project]
+name = "inter_sdk_python"
 version = "0.1.0"
 description = ""
-authors = ["Raimundo do Espírito Santo <fo356109@inter.co>"]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-
+requires-python = ">=3.12"
+dependencies = [
+    "annotated-types==0.7.0",
+    "certifi==2024.12.14",
+    "cffi==1.17.1",
+    "charset-normalizer==3.4.1",
+    "cryptography==44.0.0",
+    "idna==3.10",
+    "pycparser==2.22",
+    "pydantic==2.10.4",
+    "pydantic_core==2.27.2",
+    "requests==2.32.3",
+    "setuptools==75.8.0",
+    "typing_extensions==4.12.2",
+    "urllib3==2.3.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+build = ["setuptools", "wheel"]
+dev = ["hatchling>=1.29.0", "poethepoet>=0.39.0", "twine>=6.2.0"]
+
+[tool.poe]
+executor.type = "uv"
+
+[tool.poe.tasks.build]
+help = "Build package"
+cmd = "hatchling build"
+
+[tool.poe.tasks.publish]
+help = "Publish package"
+cmd = "twine upload --repository forgejo dist/*"
+
+[tool.hatch.build.targets.wheel]
+packages = ["inter_sdk_python"]
+
+[tool.hatch.build.targets.sdist]
+only-include = ["inter_sdk_python"]
+
+[tool.hatch.build.targets.wheel.sources]
+"inter_sdk_python" = "inter_sdk_python"
+
+[tool.hatch.build.targets.sdist.sources]
+"inter_sdk_python" = "inter_sdk_python"
